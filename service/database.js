@@ -2,7 +2,9 @@
 
 import levelup from 'levelup';
 
-var db = levelup('./data.db', {
+const DB_NAME = 'data.db';
+
+var db = levelup('./' + DB_NAME, {
   valueEncoding: 'json'
 });
 

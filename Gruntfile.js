@@ -12,7 +12,7 @@ module.exports = function (grunt) {
 
 
   grunt.registerTask('default', ['watch']);
-  grunt.registerTask('build', 'babel');
-  grunt.registerTask('test', [ 'jshint', 'mochacli' ]);
+  grunt.registerTask('build', ['babel', 'copyto', 'less', 'webpack']);
+  grunt.registerTask('test', ['jshint', 'mochacli']);
 
 };

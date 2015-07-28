@@ -12,7 +12,7 @@ module.exports = function watch(grunt) {
   return {
     babel: {
       files: ['service/**/*', 'web/**/*'],
-      tasks: ['babel', 'copyto', 'less', 'webpack'],
+      tasks: ['build'],
       options: options
     }
   };
