@@ -2,16 +2,13 @@
 
 require('babel/register');
 
-import bunyan from 'bunyan';
+import logger from './log';
 import * as Async from 'async';
 import parse from 'parse-link-header';
 import * as GithubAPI from 'octonode';
 import * as Database from './database';
 import merge from 'lodash-node/modern/object/merge';
 import pick from 'lodash-node/modern/object/pick';
-
-
-var logger = bunyan.createLogger({name: 'gander'});
 
 const ORGS = require('../../app').organizations;
 const ACCESS_TOKEN = require('../../app').githubAccessToken;
@@ -147,14 +144,18 @@ function mashReposWithIssues(repos, issues) {
       return repo.name === issue.repository.name;
     });
 
-    let repo = repos[index];
-    delete issue.repository;
+    // happens when the repository is private
+    if (index === -1) {
+      logger.error({
+        type: 'CANNOT_FIND_REPO_FOR_ISSUE',
+        issue: issue
+      });
 
-    if (!repo) {
-      // TODO: figure out why this is happening.
-      logger.error('undefined repo');
       return;
     }
+
+    let repo = repos[index];
+    delete issue.repository;
 
     // push the issue into the appropriate bucket
     repo.computed[issue.pull_request ? 'pull_requests' : 'issues'].push(issue);

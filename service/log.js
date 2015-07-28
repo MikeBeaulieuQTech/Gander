@@ -1,14 +1,28 @@
-// 'use strict';
+'use strict';
 
-// import bunyan from 'bunyan';
+import bunyan from 'bunyan';
+import {normalize} from 'path';
 
-// var logger = bunyan.createLogger({name: 'gander'});
+const LOG_PATH = normalize(process.cwd() + '/logs/gander-service.log');
 
-// require('request-debug')(require('request'), function(type, data, r) {
-//   logger.info({
-//     type: type,
-//     data: data
-//   });
-// });
+// for verification purposes
+console.log('LOG_PATH is ' + LOG_PATH);
 
-// export default logger;
+var logger = bunyan.createLogger({
+  name: 'gander-service',
+  streams: [
+    {
+      level: 'info',
+      stream: process.stdout
+    },
+    {
+      level: 'error',
+      type: 'rotating-file',
+      period: '1d',
+      count: 10,
+      path: LOG_PATH
+    }
+  ]
+});
+
+export default logger;
