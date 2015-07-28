@@ -2,14 +2,14 @@
 
 require('babel/register');
 
+import bunyan from 'bunyan';
 import * as Async from 'async';
-import * as GithubAPI from 'octonode';
 import parse from 'parse-link-header';
+import * as GithubAPI from 'octonode';
 import * as Database from './database';
 import merge from 'lodash-node/modern/object/merge';
 import pick from 'lodash-node/modern/object/pick';
 
-import bunyan from 'bunyan';
 
 var logger = bunyan.createLogger({name: 'gander'});
 
@@ -149,6 +149,12 @@ function mashReposWithIssues(repos, issues) {
 
     let repo = repos[index];
     delete issue.repository;
+
+    if (!repo) {
+      // TODO: figure out why this is happening.
+      logger.error('undefined repo');
+      return;
+    }
 
     // push the issue into the appropriate bucket
     repo.computed[issue.pull_request ? 'pull_requests' : 'issues'].push(issue);
