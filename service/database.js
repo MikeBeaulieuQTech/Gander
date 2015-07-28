@@ -1,12 +1,21 @@
 'use strict';
 
+import logger from './log';
 import levelup from 'levelup';
 
 const DB_NAME = 'data.db';
 
-var db = levelup('./' + DB_NAME, {
-  valueEncoding: 'json'
-});
+var db;
+
+try {
+  db = levelup('./' + DB_NAME, {
+    valueEncoding: 'json'
+  });
+  }
+catch (err) {
+  logger.error('ERROR_IN_DB_OPEN');
+  logger.info(err);
+}
 
 function save(key, value, callback) {
   db.put(key, value, callback);

@@ -24,6 +24,11 @@ client.requestDefaults['headers'] = {
 
 function getAllRepos(org, withOptions, whenDone) {
 
+  logger.info({
+    method: 'getAllRepos',
+    args: arguments
+  });
+
   var attrsToPick = [
     'id',
     'name',
@@ -47,6 +52,11 @@ function getAllRepos(org, withOptions, whenDone) {
 
 function getAllIssues(org, withOptions, whenDone) {
 
+  logger.info({
+    method: 'getAllIssues',
+    args: arguments
+  });
+
   var attrsToPick = [
     'title',
     'created_at',
@@ -61,6 +71,11 @@ function getAllIssues(org, withOptions, whenDone) {
 }
 
 function getAll(url, withOptions, attrsToPick, whenDone) {
+
+  logger.info({
+    method: 'getAll',
+    args: arguments
+  });
 
   var results = [];
 
@@ -79,10 +94,19 @@ function getAll(url, withOptions, attrsToPick, whenDone) {
 
   function get(done) {
     options.page += 1;
+    logger.info({
+      method: 'getAll:get',
+      page: options.page
+    });
     client.get(url, options, done);
   }
 
   function handler(err, statusCode, data, headers) {
+
+    logger.info({
+      method: 'getAll:handler',
+      args: arguments
+    });
 
     if (err) {
       return whenDone(err);
@@ -107,7 +131,10 @@ function getAll(url, withOptions, attrsToPick, whenDone) {
 }
 
 function getRepoAndIssues(org, done) {
-
+  logger.info({
+    method: 'getRepoAndIssues',
+    args: arguments
+  });
   Async.parallel([
 
     function(callback) {
@@ -170,6 +197,7 @@ export function sync() {
 
     getRepoAndIssues(org, function(err, results) {
       if (err) {
+        logger.info(err);
         return callback(err);
       }
 
@@ -187,6 +215,10 @@ export function sync() {
 }
 
 export function fetch(org, callback) {
+  logger.info({
+    method: 'fetch',
+    args: arguments
+  });
 
   Database.readReposWithIssues(org, callback);
 }
@@ -199,6 +231,7 @@ export function fetchAll(callback) {
 
     fetch(org, function(err, obj) {
       if (err) {
+        logger.info(err);
         return itCallback(err);
       }
 
@@ -218,6 +251,7 @@ export function fetchAllIssues(callback) {
   fetchAll(function(err, results) {
 
     if (err) {
+      logger.info(err);
       return callback(err);
     }
 
