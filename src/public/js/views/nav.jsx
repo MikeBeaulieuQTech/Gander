@@ -9,7 +9,7 @@ class Nav extends React.Component {
       <nav>
         <div className='nav-wrapper'>
           <div className='left heading'>{this.props.title}</div>
-          <div className='right reposcount'>{this.props.reposCount} repositories in total</div>
+          <div className='right reposcount'>{this.props.reposCount || 0} repositories in total</div>
         </div>
       </nav>
     );
