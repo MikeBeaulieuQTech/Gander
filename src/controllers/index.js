@@ -1,7 +1,7 @@
 'use strict';
 
-import appJson from '../../../app.json';
-import {fetchAll} from '../../service/index';
+import appJson from '../../app.json';
+import {fetchAll} from '../service/index';
 
 module.exports = function (router) {
 

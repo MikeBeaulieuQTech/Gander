@@ -7,9 +7,9 @@ module.exports = function webpack(grunt) {
   return {
     someName: {
       // webpack options
-      entry: './.dist/web/public/js/index.js',
+      entry: './.dist/public/js/index.js',
       output: {
-          path: './.dist/web/.build/js/',
+          path: './.dist/.build/js/',
           filename: 'bundle.js',
       },
 

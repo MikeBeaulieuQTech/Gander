@@ -13,9 +13,9 @@ module.exports = function less(grunt) {
             },
             files: [{
                 expand: true,
-                cwd: '.dist/web/public/css',
+                cwd: '.dist/public/css',
                 src: ['**/*.less'],
-                dest: '.dist/web/.build/css/',
+                dest: '.dist/.build/css/',
                 ext: '.css'
             }]
         }

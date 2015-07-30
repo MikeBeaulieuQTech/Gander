@@ -8,7 +8,7 @@
     "test": "grunt test",
     "build": "grunt build",
     "all": "npm run build && npm run test",
-    "start": "node ./.dist/web/server.js",
+    "start": "node ./.dist/server.js",
     "sync": "node ./.dist/service/sync.js"
   },
   "dependencies": {
