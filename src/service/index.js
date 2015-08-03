@@ -2,16 +2,13 @@
 
 require('babel/register');
 
-import bunyan from 'bunyan';
+import logger from './log';
 import * as Async from 'async';
 import parse from 'parse-link-header';
 import * as GithubAPI from 'octonode';
 import * as Database from './database';
 import merge from 'lodash-node/modern/object/merge';
 import pick from 'lodash-node/modern/object/pick';
-
-
-var logger = bunyan.createLogger({name: 'gander'});
 
 const ORGS = require('../../app').organizations;
 const ACCESS_TOKEN = require('../../app').githubAccessToken;
@@ -26,6 +23,11 @@ client.requestDefaults['headers'] = {
 
 
 function getAllRepos(org, withOptions, whenDone) {
+
+  logger.info({
+    method: 'getAllRepos',
+    args: arguments
+  });
 
   var attrsToPick = [
     'id',
@@ -50,6 +52,11 @@ function getAllRepos(org, withOptions, whenDone) {
 
 function getAllIssues(org, withOptions, whenDone) {
 
+  logger.info({
+    method: 'getAllIssues',
+    args: arguments
+  });
+
   var attrsToPick = [
     'title',
     'created_at',
@@ -64,6 +71,11 @@ function getAllIssues(org, withOptions, whenDone) {
 }
 
 function getAll(url, withOptions, attrsToPick, whenDone) {
+
+  logger.info({
+    method: 'getAll',
+    args: arguments
+  });
 
   var results = [];
 
@@ -82,10 +94,19 @@ function getAll(url, withOptions, attrsToPick, whenDone) {
 
   function get(done) {
     options.page += 1;
+    logger.info({
+      method: 'getAll:get',
+      page: options.page
+    });
     client.get(url, options, done);
   }
 
   function handler(err, statusCode, data, headers) {
+
+    logger.info({
+      method: 'getAll:handler',
+      args: arguments
+    });
 
     if (err) {
       return whenDone(err);
@@ -110,7 +131,10 @@ function getAll(url, withOptions, attrsToPick, whenDone) {
 }
 
 function getRepoAndIssues(org, done) {
-
+  logger.info({
+    method: 'getRepoAndIssues',
+    args: arguments
+  });
   Async.parallel([
 
     function(callback) {
@@ -147,14 +171,18 @@ function mashReposWithIssues(repos, issues) {
       return repo.name === issue.repository.name;
     });
 
-    let repo = repos[index];
-    delete issue.repository;
+    // happens when the repository is private
+    if (index === -1) {
+      logger.error({
+        type: 'CANNOT_FIND_REPO_FOR_ISSUE',
+        issue: issue
+      });
 
-    if (!repo) {
-      // TODO: figure out why this is happening.
-      logger.error('undefined repo');
       return;
     }
+
+    let repo = repos[index];
+    delete issue.repository;
 
     // push the issue into the appropriate bucket
     repo.computed[issue.pull_request ? 'pull_requests' : 'issues'].push(issue);
@@ -169,6 +197,7 @@ export function sync() {
 
     getRepoAndIssues(org, function(err, results) {
       if (err) {
+        logger.info(err);
         return callback(err);
       }
 
@@ -186,6 +215,10 @@ export function sync() {
 }
 
 export function fetch(org, callback) {
+  logger.info({
+    method: 'fetch',
+    args: arguments
+  });
 
   Database.readReposWithIssues(org, callback);
 }
@@ -198,6 +231,7 @@ export function fetchAll(callback) {
 
     fetch(org, function(err, obj) {
       if (err) {
+        logger.info(err);
         return itCallback(err);
       }
 
@@ -217,6 +251,7 @@ export function fetchAllIssues(callback) {
   fetchAll(function(err, results) {
 
     if (err) {
+      logger.info(err);
       return callback(err);
     }
 

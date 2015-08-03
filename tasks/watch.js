@@ -11,7 +11,7 @@ module.exports = function watch(grunt) {
 
   return {
     babel: {
-      files: ['service/**/*', 'web/**/*'],
+      files: ['src/**/*'],
       tasks: ['build'],
       options: options
     }

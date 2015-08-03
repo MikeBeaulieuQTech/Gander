@@ -11,9 +11,11 @@ module.exports = function clean(grunt) {
     dist: {
       files: [{
         expand: true,
-        src: ['service/**/*.js', 'web/**/*.js', 'web/**/*.jsx'],
+        cwd: 'src/',
+        src: ['**/*.js', '**/*.jsx'],
         dest: '<%= _config.folders.transpiled %>' + '/'
       }]
     }
   };
 };
+

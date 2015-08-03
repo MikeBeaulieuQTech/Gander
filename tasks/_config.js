@@ -16,9 +16,7 @@ module.exports = function(grunt) {
             less: ['src/public/css/app.less'],
             watchedLess: ['src/public/css/*.less'],
             browserifyWhitelist: ['.dist/public/*',
-                            '.dist/routes/*',
-                            'lib/model/*',
-                            'config/ui.json']
+                            '.dist/routes/*']
         },
         folders: {
             coverage: 'coverage',

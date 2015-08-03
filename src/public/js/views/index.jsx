@@ -5,21 +5,23 @@ import Nav from './nav.jsx';
 import Card from './card.jsx';
 import Search from './search.jsx';
 import Dropdown from './dropdown.jsx';
+var ErrorPage = require('./error.jsx');
 
-class Index extends React.Component {
+var Index = React.createClass({
 
-  constructor(props) {
-    super(props);
+  componentWillMount: function() {
     this.doSearch = this.doSearch.bind(this);
     this.doSortBy = this.doSortBy.bind(this);
 
-    let repos = this.props.data.orgs[0].repos;
-    this.state = {
-      repos: repos
+    if (!this.props.err) {
+      let repos = this.props.data.orgs[0].repos;
+      this.setState({
+        repos: repos
+      });
     }
-  }
+  },
 
-  doSearch(key) {
+  doSearch: function(key) {
 
     if (!key) {
       this.setState({
@@ -37,9 +39,9 @@ class Index extends React.Component {
     this.setState({
       repos: repos
     });
-  }
+  },
 
-  doSortBy(type) {
+  doSortBy: function(type) {
     var repos = this.props.data.orgs[0].repos;
     if (type === 'pull_requests') {
       repos.sort(function(repoA, repoB) {
@@ -62,10 +64,20 @@ class Index extends React.Component {
     this.setState({
       repos: repos
     });
-  }
+  },
 
-  render() {
-    var org = this.props.data.orgs[0];
+  render: function() {
+
+    if (this.props.err) {
+      return (
+        <div>
+          <Nav title={this.props.data.title} />
+          <ErrorPage err={this.props.err} />
+        </div>
+      );
+    }
+
+    let org = this.props.data.orgs[0];
 
     return(
       <div>
@@ -81,6 +93,6 @@ class Index extends React.Component {
         </div>
       </div>);
   }
-}
+});
 
 export default Index;
