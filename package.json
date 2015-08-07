@@ -1,7 +1,7 @@
 {
   "name": "gander",
   "version": "0.1.0",
-  "description": "open source one stop",
+  "description": "Gander - Open Source Metrics in one quick look",
   "author": "Sam, Duane",
   "main": "index.js",
   "scripts": {
