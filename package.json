@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "description": "Gander - Open Source Metrics in one quick look",
   "author": "Sam, Duane",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/paypal/Gander.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "grunt test",
