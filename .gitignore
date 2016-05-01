@@ -6,4 +6,4 @@ log
 data.db
 *.log
 app.json
-logs
+logs/**
