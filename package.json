@@ -31,7 +31,7 @@
     "materialize-css": "^0.96.1",
     "node-jsx": "^0.13.3",
     "octonode": "^0.7.1",
-    "parse-link-header": "^0.2.0",
+    "parse-link-header": "^2.0.0",
     "react": "^0.13.3",
     "react-engine": "^1.7.0",
     "react-router": "^0.13.3"
